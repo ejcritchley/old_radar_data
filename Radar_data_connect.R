@@ -596,3 +596,5 @@ mapview(include_tracks, color = 'green', col.regions = ) + exclude_tracks  + aoi
 mapview(include_tracks) + aoi2
 
 
+
+
