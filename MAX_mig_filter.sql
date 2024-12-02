@@ -32,3 +32,6 @@ from
 	tortuosity_table
 where
 	tortuosity > 0.65
+	and
+	tortuosity < 0.85
+
