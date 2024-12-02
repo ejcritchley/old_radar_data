@@ -56,6 +56,12 @@ con <- dbConnect(RPostgres::Postgres(),
                  user=rstudioapi::askForPassword("Database username"),
                  password=rstudioapi::askForPassword("Database password"))
 
+con <- dbConnect(RPostgres::Postgres(), 
+                 host="ninradardata01.nina.no", 
+                 dbname="robinv216_kleive",
+                 user=rstudioapi::askForPassword("Database username"),
+                 password=rstudioapi::askForPassword("Database password"))
+
 
 # basic functions for exploring the tables in the database
 
@@ -384,6 +390,29 @@ map
 
 leaflet(map)
 
+# database = robinv216_kleive
+
+robin_query = 
+  st_read(con, 
+          query = 
+            "SELECT * FROM m201609.track 
+       WHERE timestamp_start > '2016-09-02 11:00:00'
+       AND timestamp_end < '2016-09-02 13:00:00';",
+          geometry_column = 'trajectory'
+  )
+
+
+robin_query <- st_zm(robin_query)
+
+map =
+  mapview(robin_query,
+          label = paste0(robin_query$classification_id)
+  )
+
+map
+
+leaflet(map)
+
 
 # database = merlin_radar
 
@@ -484,12 +513,16 @@ location <- 'Fedje'
 test_tracks = 
   st_read(con, 
           query = 
-            "WITH modified_tracks AS (
+            "WITH transformed_tracks AS (
             SELECT *,
-            ST_Length(trajectory) as track_length, 
-      	    ST_Distance(ST_StartPoint(trajectory),
-	          ST_EndPoint(trajectory)) as track_distance
-            FROM m202210.track 
+            ST_Transform(trajectory, 25833) as trajectory_utm
+            FROM m202210.track),
+            modified_tracks AS (
+            SELECT *,
+            ST_Length(trajectory_utm) as track_length, 
+      	    ST_Distance(ST_StartPoint(trajectory_utm),
+	          ST_EndPoint(trajectory_utm)) as track_distance
+            FROM transformed_tracks 
        WHERE timestamp_start > '2022-10-10 09:00:00'
        AND timestamp_end < '2022-10-10 14:00:00'
        AND avg_rcs > -40
@@ -511,7 +544,7 @@ from
 	tortuosity_table
 where
 	tortuosity > 0.65;",
-          geometry_column = 'trajectory')
+          geometry_column = 'trajectory_utm')
 
 
 mapview(test_tracks)
