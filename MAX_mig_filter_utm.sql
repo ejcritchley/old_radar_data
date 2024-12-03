@@ -1,5 +1,5 @@
 create or replace
-view m202210.Fedje_filtered_tracks as 
+view m202210.filtered_tracks as 
 with transformed_tracks as (
 select
 *,
@@ -9,9 +9,9 @@ m202210.track),
 modified_tracks as (
 select
 	*,
-	ST_Length(trajectory) as track_length, 
-	ST_Distance(ST_StartPoint(trajectory),
-	ST_EndPoint(trajectory)) as track_distance,
+	ST_Length(trajectory_utm) as track_length, 
+	ST_Distance(ST_StartPoint(trajectory_utm),
+	ST_EndPoint(trajectory_utm)) as track_distance,
 	st_startpoint(trajectory_utm) as start_point 
 from
 	transformed_tracks
