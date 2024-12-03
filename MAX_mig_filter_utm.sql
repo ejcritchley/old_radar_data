@@ -1,11 +1,13 @@
 create or replace
 view m202210.Fedje_filtered_tracks as 
+-- Step 1: Transform the tracks to UTM for distance calculations in metres
 with transformed_tracks as (
 select
 *,
 st_transform(trajectory, 25833) as trajectory_utm
 from
 m202210.track),
+-- Step 2: Calculate track metrics and filter based on migration criteria
 modified_tracks as (
 select
 	*,
@@ -26,6 +28,7 @@ score > 0.85
 airspeed > 5
 	and airspeed < 30
 	),
+-- Step 3: Calculate tortuosity
 	tortuosity_table as (
 select
 	*,
@@ -33,6 +36,7 @@ select
 from
 	modified_tracks
 )
+-- Step 4: Filter based on track tortuosity
 select
 	*
 from
