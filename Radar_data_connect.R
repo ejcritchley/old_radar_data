@@ -521,10 +521,11 @@ test_tracks =
             SELECT *,
             ST_Length(trajectory_utm) as track_length, 
       	    ST_Distance(ST_StartPoint(trajectory_utm),
-	          ST_EndPoint(trajectory_utm)) as track_distance
+	          ST_EndPoint(trajectory_utm)) as track_distance,
+	          ST_startpoint(trajectory_utm) as start_point
             FROM transformed_tracks 
-       WHERE timestamp_start > '2022-10-10 09:00:00'
-       AND timestamp_end < '2022-10-10 14:00:00'
+       WHERE timestamp_start > '2022-10-20 00:00:00'
+       AND timestamp_end < '2022-10-20 23:59:59'
        AND avg_rcs > -40
        AND avg_rcs < 0
        AND score > 0.85

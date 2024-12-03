@@ -7,10 +7,7 @@ aoi <- st_read("P:/312202_visavis/WP2/Previous_radar_migration/GIS/radar_inclusi
 
 # create separate spatial object with just start points
 
-test_tracks <- test_tracks %>%
-  mutate(start_point = lwgeom::st_startpoint(test_tracks))
-
-track_start <- st_as_sf(test_tracks$start_point) # make spatial object
+track_start <- st_as_sf(lwgeom::st_startpoint(test_tracks)) # make spatial object
 
 track_start <- cbind(track_start,test_tracks$id) # add id fields
 
@@ -33,3 +30,6 @@ include_tracks <- test_tracks %>%
   filter(include == 'TRUE')
 
 mapview(include_tracks) + aoi
+
+
+rm(point_aoi,test_tracks,track_start)
