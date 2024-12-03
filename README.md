@@ -13,8 +13,13 @@ This repository is for the processing and analysis of old avian radar data to co
 
 Postgresql-scripts for processing the radar data to extract migration tracks and migration rates
 - Fedje_2022_migration - test script for accessing the MAX radar data collected at Fedje in 2022
+- MAX_mig_filter - script for filtering data from a MAX radar database
+- MAX_mig_filter_utm - script for filtering data from a MAX radar database and transforming it to UTM for distance calculations
 
 R-scripts for interaction with the database
 - Radar_data_connect - for initial connection to the radar databases
 - Step2_track_aoi_exclude - for removing tracks that start outside the area of includion
 - Step3_Migration_traffic_rate - for calculating the MTR from the filtered tracks
+
+Metadata
+- Radar_metadata - list of radar databases and the relevant fields for analysis
